@@ -1,27 +1,65 @@
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Layout from "./components/Layout";
 
 function App() {
-  const initialState = [
-    {
-      id: 0,
-      title: "JS",
-      body: "Array Methods 공부하기",
-      isDone: false,
-    },
-    {
-      id: 1,
-      title: "React",
-      body: "Todo List 만들기",
-      isDone: false,
-    },
-  ];
+  // const initialState = [
+  //   {
+  //     id: 0,
+  //     title: "JS",
+  //     body: "Array Methods 공부하기",
+  //     isDone: false,
+  //   },
+  // ];
+  const initialState = localStorage.getItem("todoList")
+    ? JSON.parse(localStorage.getItem("todoList"))
+    : [];
+
+  const [toDoList, setToDoList] = useState(initialState);
+  const [toDoTitle, setToDoTitle] = useState("");
+  const [toDoContent, setToDoContent] = useState("");
+  const titleInput = useRef(null);
+  const contentInput = useRef(null);
+
+  useEffect(
+    () => localStorage.setItem("todoList", JSON.stringify(toDoList)),
+    [toDoList]
+  );
+  const handleSetTitle = (e) => {
+    setToDoTitle(e.target.value.trim());
+  };
+  const handleSetContent = (e) => {
+    setToDoContent(e.target.value.trim());
+  };
+  const handleTodoSubmit = (e) => {
+    e.preventDefault();
+    if (toDoTitle.length > 0 && toDoContent.length > 0) {
+      const id =
+        toDoList.length !== 0 ? toDoList[toDoList.length - 1].id + 1 : 0;
+      const title = toDoTitle;
+      const body = toDoContent;
+      const isDone = false;
+      setToDoList([...toDoList, { id, title, body, isDone }]);
+
+      setToDoTitle("");
+      setToDoContent("");
+      titleInput.current.focus();
+    } else {
+      alert("제목과 내용을 모두 채워주세요.");
+      if (toDoTitle.length <= 0) {
+        titleInput.current.focus();
+      } else {
+        contentInput.current.focus();
+      }
+    }
+  };
+
   return (
     <>
       <Header />
       <Layout>
-        <form>
+        <form onSubmit={handleTodoSubmit}>
           <div className="flex justify-center gap-4 pt-8 pb-14">
             <div>
               <label htmlFor="toDoTitle" className="text-lg font-semibold">
@@ -30,6 +68,9 @@ function App() {
               <input
                 id="toDoTitle"
                 type="text"
+                value={toDoTitle}
+                onChange={handleSetTitle}
+                ref={titleInput}
                 className="border px-3 py-1 rounded font-semibold"
                 placeholder="제목을 입력해주세요"
               />
@@ -41,6 +82,9 @@ function App() {
               <input
                 id="toDoContent"
                 type="text"
+                value={toDoContent}
+                onChange={handleSetContent}
+                ref={contentInput}
                 className="border px-3 py-1 rounded font-semibold"
                 placeholder="내용을 입력해주세요"
               />
@@ -59,7 +103,7 @@ function App() {
               WORKING
             </h2>
             <ul>
-              {initialState.map((todo) => (
+              {toDoList.map((todo) => (
                 <li className={`mb-4 p-4 border rounded border-[#C5D5DD]`}>
                   <h3 className="mb-1 font-semibold text-lg text-[#0E2D3E] break-words">
                     {todo.title}
