@@ -28,18 +28,18 @@ function App() {
     [toDoList]
   );
   const handleSetTitle = (e) => {
-    setToDoTitle(e.target.value.trim());
+    setToDoTitle(e.target.value);
   };
   const handleSetContent = (e) => {
-    setToDoContent(e.target.value.trim());
+    setToDoContent(e.target.value);
   };
   const handleTodoSubmit = (e) => {
     e.preventDefault();
     if (toDoTitle.length > 0 && toDoContent.length > 0) {
       const id =
         toDoList.length !== 0 ? toDoList[toDoList.length - 1].id + 1 : 0;
-      const title = toDoTitle;
-      const body = toDoContent;
+      const title = toDoTitle.trim();
+      const body = toDoContent.trim();
       const isDone = false;
       setToDoList([...toDoList, { id, title, body, isDone }]);
 
