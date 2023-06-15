@@ -57,6 +57,15 @@ function App() {
   const handleToDoDelete = (id) => {
     setToDoList(toDoList.filter((todo) => todo.id !== id));
   };
+  const handleToDoStateChange = (id) => {
+    const changed = toDoList.map((todo) => {
+      if (todo.id === id) {
+        todo.isDone = !todo.isDone;
+      }
+      return todo;
+    });
+    setToDoList(changed);
+  };
   return (
     <>
       <Header />
@@ -105,32 +114,68 @@ function App() {
               WORKING
             </h2>
             <ul>
-              {toDoList.map((todo) => (
-                <li className={`mb-4 p-4 border rounded border-[#C5D5DD]`}>
-                  <h3 className="mb-1 font-semibold text-lg text-[#0E2D3E] break-words">
-                    {todo.title}
-                  </h3>
-                  <p className="break-words">{todo.body}</p>
-                  <div className="flex justify-end gap-1 mt-3">
-                    <button
-                      className="rounded-md px-4 py-1 text-sm font-semibold bg-red-500 text-white"
-                      onClick={() => handleToDoDelete(todo.id)}
-                    >
-                      삭제
-                    </button>
-                    <button className="rounded-md px-4 py-1 text-sm font-semibold bg-[#0E2D3E] text-white">
-                      완성
-                    </button>
-                  </div>
-                </li>
-              ))}
+              {toDoList
+                .filter((todo) => todo.isDone === false)
+                .map((todo) => (
+                  <li
+                    key={todo.id}
+                    className={`mb-4 p-4 border rounded border-[#C5D5DD]`}
+                  >
+                    <h3 className="mb-1 font-semibold text-lg text-[#0E2D3E] break-words">
+                      {todo.title}
+                    </h3>
+                    <p className="break-words">{todo.body}</p>
+                    <div className="flex justify-end gap-1 mt-3">
+                      <button
+                        className="rounded-md px-4 py-1 text-sm font-semibold bg-red-500 text-white"
+                        onClick={() => handleToDoDelete(todo.id)}
+                      >
+                        삭제
+                      </button>
+                      <button
+                        className="rounded-md px-4 py-1 text-sm font-semibold bg-[#0E2D3E] text-white"
+                        onClick={() => handleToDoStateChange(todo.id)}
+                      >
+                        완성
+                      </button>
+                    </div>
+                  </li>
+                ))}
             </ul>
           </article>
           <article>
             <h2 className="text-2xl font-semibold font-mono text-[#D4634F] mb-5">
               DONE
             </h2>
-            <ul></ul>
+            <ul>
+              {toDoList
+                .filter((todo) => todo.isDone === true)
+                .map((todo) => (
+                  <li
+                    key={todo.id}
+                    className={`mb-4 p-4 border rounded border-[#C5D5DD]`}
+                  >
+                    <h3 className="mb-1 font-semibold text-lg text-[#0E2D3E] break-words">
+                      {todo.title}
+                    </h3>
+                    <p className="break-words">{todo.body}</p>
+                    <div className="flex justify-end gap-1 mt-3">
+                      <button
+                        className="rounded-md px-4 py-1 text-sm font-semibold bg-red-500 text-white"
+                        onClick={() => handleToDoDelete(todo.id)}
+                      >
+                        삭제
+                      </button>
+                      <button
+                        className="rounded-md px-4 py-1 text-sm font-semibold bg-[#3F7E9A] text-white"
+                        onClick={() => handleToDoStateChange(todo.id)}
+                      >
+                        취소
+                      </button>
+                    </div>
+                  </li>
+                ))}
+            </ul>
           </article>
         </section>
       </Layout>
