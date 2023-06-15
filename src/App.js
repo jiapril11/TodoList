@@ -54,7 +54,9 @@ function App() {
       }
     }
   };
-
+  const handleToDoDelete = (id) => {
+    setToDoList(toDoList.filter((todo) => todo.id !== id));
+  };
   return (
     <>
       <Header />
@@ -110,7 +112,10 @@ function App() {
                   </h3>
                   <p className="break-words">{todo.body}</p>
                   <div className="flex justify-end gap-1 mt-3">
-                    <button className="rounded-md px-4 py-1 text-sm font-semibold bg-red-500 text-white">
+                    <button
+                      className="rounded-md px-4 py-1 text-sm font-semibold bg-red-500 text-white"
+                      onClick={() => handleToDoDelete(todo.id)}
+                    >
                       삭제
                     </button>
                     <button className="rounded-md px-4 py-1 text-sm font-semibold bg-[#0E2D3E] text-white">
