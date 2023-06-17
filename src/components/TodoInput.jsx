@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function TodoInput({ toDoList, setToDoList }) {
   const [toDoTitle, setToDoTitle] = useState("");
@@ -15,8 +16,7 @@ export default function TodoInput({ toDoList, setToDoList }) {
   const handleTodoSubmit = (e) => {
     e.preventDefault();
     if (toDoTitle.length > 0 && toDoContent.length > 0) {
-      const id =
-        toDoList.length !== 0 ? toDoList[toDoList.length - 1].id + 1 : 0;
+      const id = uuidv4();
       const title = toDoTitle.trim();
       const body = toDoContent.trim();
       const isDone = false;
